@@ -14,6 +14,8 @@
     "test": "node --test tests/project.test.mjs"
   },
   "dependencies": {
+    "@supabase/ssr": "0.12.3",
+    "@supabase/supabase-js": "2.110.7",
     "lucide-react": "^0.468.0",
     "next": "16.2.6",
     "react": "19.2.6",
