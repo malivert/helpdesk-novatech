@@ -4,7 +4,7 @@
   "private": true,
   "description": "Application web de gestion de tickets informatiques pour un projet BTS SIO SISR.",
   "engines": {
-    "node": ">=20.9.0"
+    "node": "22.x"
   },
   "scripts": {
     "dev": "next dev",
