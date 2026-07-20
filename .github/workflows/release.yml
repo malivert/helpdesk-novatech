@@ -1,0 +1,45 @@
+name: Publication de la release
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Release de la version déclarée
+    runs-on: ubuntu-latest
+    steps:
+      - name: Récupérer le dépôt
+        uses: actions/checkout@v4
+
+      - name: Créer la release si nécessaire
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { version } = require('./package.json');
+            const tag = `v${version}`;
+            try {
+              await github.rest.repos.getReleaseByTag({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                tag,
+              });
+              core.info(`La release ${tag} existe déjà.`);
+            } catch (error) {
+              if (error.status !== 404) throw error;
+              await github.rest.repos.createRelease({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                tag_name: tag,
+                target_commitish: context.sha,
+                name: `HelpDesk NovaTech ${version}`,
+                body: 'Version stable avec gestion des tickets, parc informatique, mode autonome, documentation et contrôles qualité.',
+                generate_release_notes: true,
+                draft: false,
+                prerelease: false,
+              });
+              core.info(`Release ${tag} créée.`);
+            }

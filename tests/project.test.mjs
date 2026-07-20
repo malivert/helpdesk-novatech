@@ -3,9 +3,9 @@ import { readFile } from "node:fs/promises";
 import test from "node:test";
 
 const read = (path) => readFile(new URL(path, import.meta.url), "utf8");
-const [page, styles, client, proxy, readme, changelog, workflow, packageJson, migration, layout] = await Promise.all([
+const [page, styles, client, proxy, readme, changelog, workflow, releaseWorkflow, packageJson, migration, layout] = await Promise.all([
   read("../app/page.tsx"), read("../app/globals.css"), read("../lib/supabase/client.ts"),
-  read("../lib/supabase/proxy.ts"), read("../README.md"), read("../CHANGELOG.md"), read("../.github/workflows/ci.yml"),
+  read("../lib/supabase/proxy.ts"), read("../README.md"), read("../CHANGELOG.md"), read("../.github/workflows/ci.yml"), read("../.github/workflows/release.yml"),
   read("../package.json"), read("../supabase/migrations/20260720162335_helpdesk_core.sql"), read("../app/layout.tsx"),
 ]);
 
@@ -170,4 +170,6 @@ test("GitHub Actions vérifie tests, lint, TypeScript et build", () => {
   assert.match(workflow, /npm run lint/);
   assert.match(workflow, /npm run typecheck/);
   assert.match(workflow, /npm run build/);
+  assert.match(releaseWorkflow, /createRelease/);
+  assert.match(releaseWorkflow, /v\$\{version\}/);
 });
