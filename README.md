@@ -6,7 +6,7 @@
 
 Application web professionnelle de gestion de tickets informatiques, réalisée dans le cadre d’un projet de première année de **BTS SIO option SISR**.
 
-HelpDesk NovaTech simule le centre de services d’une PME. Le technicien peut consulter son tableau de bord, créer une demande, rechercher et filtrer les tickets, modifier leur contenu, les assigner puis les clôturer.
+HelpDesk NovaTech est le centre de services d’une PME. Les données sont persistées dans Supabase avec authentification, contrôle d’accès par rôle et journal d’audit.
 
 ## Démonstration fonctionnelle
 
@@ -18,8 +18,9 @@ HelpDesk NovaTech simule le centre de services d’une PME. Le technicien peut c
 - recherche par identifiant, sujet, demandeur ou technicien ;
 - filtres par priorité et statut ;
 - navigation vers les vues Équipe et Paramètres ;
-- conservation locale des changements dans le navigateur ;
-- réinitialisation des données de démonstration ;
+- commentaires liés à chaque ticket ;
+- historique automatique des créations, modifications et commentaires ;
+- rôles demandeur, technicien et administrateur protégés par Row Level Security ;
 - interface responsive et navigation clavier.
 
 ## Technologies
@@ -27,7 +28,7 @@ HelpDesk NovaTech simule le centre de services d’une PME. Le technicien peut c
 - Next.js 16, React 19 et TypeScript ;
 - CSS responsive personnalisé ;
 - Lucide React pour les icônes ;
-- `localStorage` pour la démonstration locale ;
+- Supabase Postgres, Auth, SSR et Row Level Security ;
 - Node Test Runner, ESLint et validation de production.
 
 ## Prérequis
@@ -42,10 +43,11 @@ HelpDesk NovaTech simule le centre de services d’une PME. Le technicien peut c
 git clone https://github.com/malivert/helpdesk-novatech.git
 cd helpdesk-novatech
 npm ci
+cp .env.example .env.local
 npm run dev
 ```
 
-Ouvrir ensuite l’adresse indiquée par le terminal.
+Renseigner dans `.env.local` l’URL et la clé **publishable** du projet Supabase, puis ouvrir l’adresse indiquée par le terminal. Ne jamais utiliser une clé `service_role` dans l’application.
 
 ## Commandes utiles
 
@@ -73,7 +75,10 @@ helpdesk-novatech/
 ├── app/
 │   ├── globals.css       # système visuel Aurora Ops
 │   ├── layout.tsx        # métadonnées et structure HTML
-│   └── page.tsx          # vues, données et logique métier
+│   ├── login/            # connexion et inscription Supabase Auth
+│   └── page.tsx          # vues et opérations de tickets
+├── lib/supabase/         # clients navigateur, serveur et proxy SSR
+├── supabase/migrations/  # schéma SQL, déclencheurs et politiques RLS
 ├── public/               # ressources publiques
 ├── tests/                # tests du rendu de production
 ├── package.json
@@ -93,15 +98,20 @@ helpdesk-novatech/
 - recherche et filtres ;
 - vérification visuelle du tableau de bord.
 
-## Limites pédagogiques
+## Modèle de sécurité
 
-Les données sont stockées dans le navigateur afin que le projet reste installable et démontrable en une journée. Une version destinée à la production utiliserait une base de données, une authentification, une gestion des rôles, un historique d’audit et des sauvegardes serveur.
+- un **demandeur** crée des tickets, voit uniquement les siens et participe aux commentaires ;
+- un **technicien** consulte la file globale, assigne et traite les tickets ;
+- un **administrateur** possède les droits technicien et gère les rôles ;
+- les autorisations sont contrôlées dans PostgreSQL par RLS, pas seulement dans l’interface ;
+- le journal `ticket_history` est alimenté par des déclencheurs et reste en lecture seule pour le client.
 
 ## Déploiement sur Vercel
 
 1. Importer le dépôt `malivert/helpdesk-novatech` dans Vercel.
 2. Conserver le framework **Next.js** détecté automatiquement.
-3. Lancer le déploiement. Aucune variable d’environnement n’est nécessaire.
+3. Ajouter `NEXT_PUBLIC_SUPABASE_URL` et `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` dans les variables Vercel ;
+4. lancer le déploiement de prévisualisation de la branche.
 
 Le fichier `.gitignore` exclut les variables d’environnement, les clés, les certificats, les métadonnées locales et les dossiers de compilation.
 
