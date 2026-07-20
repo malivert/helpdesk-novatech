@@ -23,25 +23,10 @@ export async function updateSession(request: NextRequest) {
     },
   });
 
-  let data;
   try {
-    ({ data } = await supabase.auth.getClaims());
+    await supabase.auth.getClaims();
   } catch {
     return response;
-  }
-  const isPublic =
-    request.nextUrl.pathname.startsWith("/login") ||
-    request.nextUrl.pathname.startsWith("/auth");
-
-  if (!data?.claims && !isPublic) {
-    const login = request.nextUrl.clone();
-    login.pathname = "/login";
-    return NextResponse.redirect(login);
-  }
-  if (data?.claims && request.nextUrl.pathname === "/login") {
-    const home = request.nextUrl.clone();
-    home.pathname = "/";
-    return NextResponse.redirect(home);
   }
   return response;
 }

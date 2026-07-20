@@ -119,7 +119,10 @@ export default function Home() {
     try {
       const { data: userData, error: authError } = await supabase.auth.getUser();
       if (authError) throw authError;
-      if (!userData.user) { window.location.assign("/login"); return; }
+      if (!userData.user) {
+        activateDemo("Aucune session Supabase · mode démonstration local activé");
+        return;
+      }
       const profileResult = await supabase.from("profiles").select("id,full_name,department,role").eq("id", userData.user.id).single();
       if (profileResult.error || !profileResult.data) throw profileResult.error ?? new Error("Profil introuvable");
       const ticketResult = await supabase.from("tickets").select("*,requester:profiles!tickets_requester_id_fkey(full_name),technician:profiles!tickets_assigned_to_fkey(full_name)").order("updated_at", { ascending: false });
@@ -244,7 +247,7 @@ export default function Home() {
       setComment(""); setToast("Commentaire ajouté."); await openDetails(active);
     } catch { failToDemo("Commentaire Supabase impossible · bascule en mode local"); }
   }
-  async function logout() { if (mode === "supabase" && supabase) await supabase.auth.signOut(); window.location.assign(mode === "supabase" ? "/login" : "/"); }
+  async function logout() { if (mode === "supabase" && supabase) await supabase.auth.signOut(); window.location.assign("/"); }
   function resetDemo() { localStorage.removeItem(storageKeys.tickets); localStorage.removeItem(storageKeys.comments); localStorage.removeItem(storageKeys.history); setTickets(demoTickets); setComments([]); setHistory([]); setToast("Données de démonstration restaurées."); }
   function exportJson() { const backup: DemoBackup = { version: 1, exported_at: new Date().toISOString(), tickets, comments, history }; download("helpdesk-novatech-backup.json", JSON.stringify(backup, null, 2), "application/json"); }
   function exportCsv() {

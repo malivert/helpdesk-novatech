@@ -3,12 +3,11 @@ import { readFile } from "node:fs/promises";
 import test from "node:test";
 
 const read = (path) => readFile(new URL(path, import.meta.url), "utf8");
-const [page, client, proxy, loginPage, loginActions, readme, workflow, migration] = await Promise.all([
+const [page, client, proxy, loginPage, readme, workflow, migration] = await Promise.all([
   read("../app/page.tsx"),
   read("../lib/supabase/client.ts"),
   read("../lib/supabase/proxy.ts"),
   read("../app/login/page.tsx"),
-  read("../app/login/actions.ts"),
   read("../README.md"),
   read("../.github/workflows/ci.yml"),
   read("../supabase/migrations/20260720162335_helpdesk_core.sql"),
@@ -19,7 +18,6 @@ test("le mode hybride protège l’application des erreurs Supabase", () => {
   assert.match(proxy, /catch \{\s*return response/);
   assert.match(page, /activateDemo/);
   assert.match(page, /localStorage/);
-  assert.match(loginActions, /Supabase est momentanément inaccessible/);
 });
 
 test("le profil de démonstration est Christian Martin et ses initiales sont calculées", () => {
@@ -48,11 +46,12 @@ test("les sauvegardes, exports, filtres, tri et historique sont disponibles", ()
   assert.match(page, /localHistory/);
 });
 
-test("la page d’authentification et l’accès démonstration sont présents", () => {
-  assert.match(loginPage, /Accéder au HelpDesk/);
-  assert.match(loginPage, /Continuer en mode démonstration/);
-  assert.match(loginActions, /signInWithPassword/);
-  assert.match(loginActions, /auth\.signUp/);
+test("le tableau de bord est accessible sans panneau de connexion", () => {
+  assert.match(loginPage, /redirect\("\/"\)/);
+  assert.doesNotMatch(loginPage, /Accéder au HelpDesk/);
+  assert.doesNotMatch(page, /window\.location\.assign\("\/login"\)/);
+  assert.match(page, /Aucune session Supabase · mode démonstration local activé/);
+  assert.doesNotMatch(proxy, /NextResponse\.redirect/);
 });
 
 test("Supabase conserve les rôles, l’audit, les politiques RLS et les grants explicites", () => {
