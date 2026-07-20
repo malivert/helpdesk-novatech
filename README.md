@@ -133,6 +133,17 @@ npm run build         # compilation de production Next.js
 
 Le workflow `.github/workflows/ci.yml` exécute automatiquement ces quatre contrôles sur chaque push vers `main` et chaque Pull Request.
 
+## Guide utilisateur rapide
+
+1. Ouvrir le **Tableau de bord** pour consulter les tickets ouverts, urgents et anciens.
+2. Aller dans **Tickets**, puis créer une demande ou ouvrir une ligne existante pour consulter ses commentaires et son historique.
+3. Modifier un ticket pour l’attribuer, définir sa priorité et sa date limite. La fermeture demande toujours une confirmation et reste réversible.
+4. Ouvrir **Parc informatique** pour rechercher un matériel, contrôler son état ou sa garantie et accéder à ses tickets liés.
+5. Utiliser **Rapports** pour filtrer les indicateurs par période.
+6. Dans **Paramètres**, exporter une sauvegarde JSON ou un tableau CSV. Le JSON peut être réimporté ultérieurement.
+
+La page **À propos du projet** intégrée à l’application reprend cette prise en main, l’objectif du projet et son architecture.
+
 ## Sauvegarde locale
 
 Depuis **Paramètres et sauvegardes** :
@@ -189,9 +200,25 @@ Le fonctionnement hybride illustre aussi une notion importante en SISR : la **co
 
 > J’ai conçu HelpDesk NovaTech 2.1, une application autonome de support et de gestion de parc informatique. Elle couvre le cycle de vie complet d’un incident et l’inventaire des postes, serveurs, imprimantes et équipements réseau, avec affectations, garanties, liens vers les tickets et traçabilité. Le projet fonctionne immédiatement avec localStorage, propose Supabase en option et intègre tests, TypeScript, GitHub Actions et déploiement Vercel.
 
-## Limites pédagogiques
+## Limites et évolutions futures
 
-Le mode démonstration n’est pas synchronisé entre appareils et ne remplace pas une base sauvegardée côté serveur. Pour une exploitation réelle, il faudrait compléter la supervision, la stratégie de sauvegarde PostgreSQL, la gestion des pièces jointes, les notifications et les procédures d’administration.
+### Limites actuelles
+
+- le mode démonstration n’est pas synchronisé entre appareils ;
+- `localStorage` ne remplace pas une sauvegarde serveur pour une exploitation réelle ;
+- les pièces jointes locales sont volontairement limitées ;
+- les notifications restent internes à l’application ;
+- Supabase est conservé comme option pédagogique et demande une configuration RLS correcte pour un usage partagé.
+
+### Évolutions futures possibles
+
+- synchronisation multi-utilisateur et gestion plus fine des autorisations ;
+- supervision des serveurs, SLA et alertes automatiques ;
+- base de connaissances reliée aux tickets ;
+- génération de rapports PDF d’intervention ;
+- stockage objet sécurisé pour les pièces jointes et stratégie de sauvegarde PostgreSQL.
+
+L’historique des versions est disponible dans [`CHANGELOG.md`](CHANGELOG.md).
 
 ## Auteur
 

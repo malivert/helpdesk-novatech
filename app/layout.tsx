@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "HelpDesk NovaTech 2.0 — Centre de services IT",
-  description: "HelpDesk hybride avec rapports, historique, échéances et continuité locale.",
+  title: "HelpDesk NovaTech 2.1 — Centre de services IT",
+  description: "HelpDesk autonome avec gestion de tickets, parc informatique, rapports et continuité locale.",
   other: {
     "codex-preview": "development",
   },

@@ -3,16 +3,18 @@ import { readFile } from "node:fs/promises";
 import test from "node:test";
 
 const read = (path) => readFile(new URL(path, import.meta.url), "utf8");
-const [page, styles, client, proxy, readme, workflow, packageJson, migration] = await Promise.all([
+const [page, styles, client, proxy, readme, changelog, workflow, packageJson, migration, layout] = await Promise.all([
   read("../app/page.tsx"), read("../app/globals.css"), read("../lib/supabase/client.ts"),
-  read("../lib/supabase/proxy.ts"), read("../README.md"), read("../.github/workflows/ci.yml"),
-  read("../package.json"), read("../supabase/migrations/20260720162335_helpdesk_core.sql"),
+  read("../lib/supabase/proxy.ts"), read("../README.md"), read("../CHANGELOG.md"), read("../.github/workflows/ci.yml"),
+  read("../package.json"), read("../supabase/migrations/20260720162335_helpdesk_core.sql"), read("../app/layout.tsx"),
 ]);
 
 test("la version 2.1 est déclarée et la version 2.0 reste documentée", () => {
   assert.equal(JSON.parse(packageJson).version, "2.1.0");
   assert.match(readme, /HelpDesk NovaTech 2\.0/);
   assert.match(page, /NovaTech 2\.0/);
+  assert.match(layout, /NovaTech 2\.1/);
+  assert.match(changelog, /## \[2\.1\.0\] - 2026-07-20/);
 });
 
 test("le mode hybride bascule automatiquement vers localStorage", () => {
@@ -113,6 +115,31 @@ test("les équipements sont reliés aux tickets et adaptés au mobile", () => {
   assert.match(styles, /\.equipment-table/);
   assert.match(styles, /\.inventory-filters/);
   assert.match(readme, /Parc informatique/);
+});
+
+test("les données de démonstration sont cohérentes et suffisamment variées", () => {
+  const ticketIds = [...page.matchAll(/makeDemoTicket\((\d+),/g)].map((match) => match[1]);
+  const equipmentIds = [...page.matchAll(/id: "(eq-[^"]+)"/g)].map((match) => match[1]);
+  assert.equal(ticketIds.length, 8);
+  assert.equal(new Set(ticketIds).size, ticketIds.length);
+  assert.equal(equipmentIds.length, 7);
+  assert.equal(new Set(equipmentIds).size, equipmentIds.length);
+  for (const linkedId of [...page.matchAll(/ticket_ids: \["demo-(\d+)"\]/g)].map((match) => match[1])) assert.ok(ticketIds.includes(linkedId));
+  assert.match(page, /type: "computer"/);
+  assert.match(page, /type: "server"/);
+  assert.match(page, /type: "printer"/);
+  assert.match(page, /type: "network"/);
+});
+
+test("la présentation, le guide et la feuille de route sont intégrés", () => {
+  assert.match(page, /function ProjectPresentation/);
+  assert.match(page, /Guide utilisateur/);
+  assert.match(page, /Limites actuelles/);
+  assert.match(page, /Évolutions futures/);
+  assert.match(readme, /Guide utilisateur rapide/);
+  assert.match(readme, /Limites et évolutions futures/);
+  assert.match(styles, /\.project-hero/);
+  assert.match(styles, /\.user-guide/);
 });
 
 test("l’expérience gère hors-ligne, notifications, thème sombre et mobile", () => {
