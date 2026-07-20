@@ -1,8 +1,8 @@
 {
   "name": "helpdesk-novatech",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "private": true,
-  "description": "HelpDesk hybride professionnel avec rapports, historique et continuité locale pour BTS SIO SISR.",
+  "description": "HelpDesk autonome avec gestion de parc, rapports, historique et continuité locale pour BTS SIO SISR.",
   "engines": {
     "node": "22.x"
   },

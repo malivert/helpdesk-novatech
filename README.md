@@ -5,7 +5,7 @@
 [![Supabase](https://img.shields.io/badge/Supabase-optionnel-3FCF8E?logo=supabase&logoColor=white)](https://supabase.com/)
 [![CI](https://github.com/malivert/helpdesk-novatech/actions/workflows/ci.yml/badge.svg)](https://github.com/malivert/helpdesk-novatech/actions/workflows/ci.yml)
 
-Application web professionnelle de gestion de tickets informatiques conçue pour un projet de première année de **BTS SIO option SISR**. La version 2.0 ajoute les rapports, les échéances, les pièces jointes locales, le mode sombre et une interface mobile renforcée.
+Application web professionnelle de gestion de tickets et de parc informatique conçue pour un projet de première année de **BTS SIO option SISR**. La version 2.1 enrichit NovaTech 2.0 avec un inventaire complet des postes, serveurs, imprimantes et équipements réseau.
 
 HelpDesk NovaTech fonctionne de manière autonome dans le navigateur. `localStorage` est le stockage principal et chaque modification est sauvegardée automatiquement. Supabase reste une option facultative, désactivée par défaut : aucune base distante, clé ou connexion n’est nécessaire.
 
@@ -41,6 +41,21 @@ Aucun compte n’est nécessaire pour ce mode. Les données restent uniquement d
 Le site ouvre directement le tableau de bord : aucun panneau de connexion ne bloque l’accès à la démonstration.
 
 ## Fonctionnalités
+
+### Parc informatique
+
+- création, modification et suppression contrôlée des équipements ;
+- ordinateurs, serveurs, imprimantes, équipements réseau et autres matériels ;
+- nom, type, adresse IP, système, utilisateur, emplacement, état, numéro de série, date d’achat et fin de garantie ;
+- états disponible, attribué, en panne et maintenance avec repères visuels ;
+- recherche multi-champs, filtres par type et état, tri par nom, type, statut, utilisateur ou garantie ;
+- statistiques calculées : disponibles, attribués, en panne et hors garantie ;
+- liaison directe entre un équipement et un ou plusieurs tickets ;
+- historique local horodaté des créations, modifications et suppressions ;
+- export de l’inventaire courant en CSV et export complet en JSON ;
+- sept équipements de démonstration réalistes couvrant postes, infrastructure et impression.
+
+### Centre de services
 
 - tableau de bord avec nombre de tickets ouverts, temps moyen de résolution, taux de résolution et urgences réellement calculés ;
 - création, modification, fermeture et réouverture des tickets ;
@@ -122,7 +137,7 @@ Le workflow `.github/workflows/ci.yml` exécute automatiquement ces quatre contr
 
 Depuis **Paramètres et sauvegardes** :
 
-1. **Export JSON** crée une sauvegarde complète des tickets, commentaires et historique.
+1. **Export JSON** crée une sauvegarde complète des tickets, commentaires, équipements et historiques.
 2. **Export CSV** exporte la liste actuellement filtrée.
 3. **Importer** restaure un fichier JSON valide dans le mode démonstration.
 4. **Réinitialiser la démo** restaure les données pédagogiques initiales.
@@ -138,7 +153,7 @@ helpdesk-novatech/
 │   ├── auth/callback/       # confirmation Supabase Auth
 │   ├── login/               # ancienne URL redirigée vers le tableau de bord
 │   ├── globals.css          # design responsive et accessible
-│   └── page.tsx             # moteur hybride, rapports et interface 2.0
+│   └── page.tsx             # moteur autonome, tickets, parc, rapports et interface 2.1
 ├── lib/supabase/            # clients sécurisés navigateur/serveur/proxy
 ├── supabase/migrations/     # schéma, audit, index et politiques RLS
 ├── tests/                   # tests automatisés
@@ -161,7 +176,7 @@ helpdesk-novatech/
 
 Ce projet permet de présenter les compétences suivantes :
 
-- **Gérer le patrimoine informatique** : inventaire logique des incidents, utilisateurs, rôles et services.
+- **Gérer le patrimoine informatique** : inventaire des postes, serveurs, imprimantes et équipements réseau, affectations, adresses IP, garanties, états, historique et tickets associés.
 - **Répondre aux incidents et aux demandes d’assistance** : cycle complet d’un ticket, priorisation, affectation, traitement et clôture.
 - **Développer la présence en ligne de l’organisation** : application responsive, accessible, documentée et déployée.
 - **Travailler en mode projet** : Git, branches, Pull Requests, README, tests et intégration continue.
@@ -172,7 +187,7 @@ Le fonctionnement hybride illustre aussi une notion importante en SISR : la **co
 
 ## Présentation pour un recruteur
 
-> J’ai conçu HelpDesk NovaTech 2.0, une application de support informatique capable de fonctionner avec une base Supabase sécurisée ou de basculer automatiquement vers une démonstration locale. Le projet couvre le cycle de vie complet d’un incident, les échéances, les commentaires, les pièces jointes, l’historique, les rapports, les sauvegardes et la continuité de service. J’ai également mis en place les tests, la vérification TypeScript, GitHub Actions et le déploiement Vercel.
+> J’ai conçu HelpDesk NovaTech 2.1, une application autonome de support et de gestion de parc informatique. Elle couvre le cycle de vie complet d’un incident et l’inventaire des postes, serveurs, imprimantes et équipements réseau, avec affectations, garanties, liens vers les tickets et traçabilité. Le projet fonctionne immédiatement avec localStorage, propose Supabase en option et intègre tests, TypeScript, GitHub Actions et déploiement Vercel.
 
 ## Limites pédagogiques
 

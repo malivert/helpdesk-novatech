@@ -9,8 +9,8 @@ const [page, styles, client, proxy, readme, workflow, packageJson, migration] = 
   read("../package.json"), read("../supabase/migrations/20260720162335_helpdesk_core.sql"),
 ]);
 
-test("la version 2.0 est déclarée et documentée", () => {
-  assert.equal(JSON.parse(packageJson).version, "2.0.0");
+test("la version 2.1 est déclarée et la version 2.0 reste documentée", () => {
+  assert.equal(JSON.parse(packageJson).version, "2.1.0");
   assert.match(readme, /HelpDesk NovaTech 2\.0/);
   assert.match(page, /NovaTech 2\.0/);
 });
@@ -72,11 +72,47 @@ test("les rapports et filtres temporels sont présents", () => {
   assert.match(page, /label="Rapports"/);
 });
 
-test("sauvegarde JSON et CSV version 2 sont disponibles", () => {
+test("sauvegarde JSON et CSV version 3 sont disponibles", () => {
   assert.match(page, /exportJson/);
   assert.match(page, /exportCsv/);
   assert.match(page, /importBackup/);
-  assert.match(page, /version: 2/);
+  assert.match(page, /version: 3/);
+});
+
+test("le parc informatique permet le CRUD et conserve un historique", () => {
+  assert.match(page, /function InventoryView/);
+  assert.match(page, /submitEquipment/);
+  assert.match(page, /deleteEquipment/);
+  assert.match(page, /addEquipmentHistory/);
+  assert.match(page, /EquipmentHistoryModal/);
+  assert.match(page, /Création|Ajouter un équipement/);
+});
+
+test("les champs professionnels et les données réalistes du parc sont présents", () => {
+  for (const field of ["ip_address", "operating_system", "user", "location", "serial_number", "purchase_date", "warranty_end"]) assert.match(page, new RegExp(field));
+  assert.match(page, /PC-FIN-01/);
+  assert.match(page, /SRV-AD-01/);
+  assert.match(page, /IMP-B12-01/);
+});
+
+test("le parc propose recherche, tri, filtres, statistiques et exports", () => {
+  assert.match(page, /filteredEquipment/);
+  assert.match(page, /equipmentQuery/);
+  assert.match(page, /equipmentType/);
+  assert.match(page, /equipmentStatus/);
+  assert.match(page, /equipmentSort/);
+  assert.match(page, /Hors garantie/);
+  assert.match(page, /exportEquipmentCsv/);
+  assert.match(page, /exportEquipmentJson/);
+});
+
+test("les équipements sont reliés aux tickets et adaptés au mobile", () => {
+  assert.match(page, /ticket_ids/);
+  assert.match(page, /Tickets liés/);
+  assert.match(page, /onTicket/);
+  assert.match(styles, /\.equipment-table/);
+  assert.match(styles, /\.inventory-filters/);
+  assert.match(readme, /Parc informatique/);
 });
 
 test("l’expérience gère hors-ligne, notifications, thème sombre et mobile", () => {
