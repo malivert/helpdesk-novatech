@@ -11,7 +11,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint app tests --max-warnings=0",
-    "test": "node --test tests/project.test.mjs"
+    "test": "node --test tests/project.test.mjs",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@supabase/ssr": "0.12.3",

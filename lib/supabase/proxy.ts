@@ -8,6 +8,7 @@ export async function updateSession(request: NextRequest) {
   const key = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
 
   if (!url || !key) return response;
+  try { new URL(url); } catch { return response; }
 
   const supabase = createServerClient<Database>(url, key, {
     cookies: {
@@ -22,7 +23,12 @@ export async function updateSession(request: NextRequest) {
     },
   });
 
-  const { data } = await supabase.auth.getClaims();
+  let data;
+  try {
+    ({ data } = await supabase.auth.getClaims());
+  } catch {
+    return response;
+  }
   const isPublic =
     request.nextUrl.pathname.startsWith("/login") ||
     request.nextUrl.pathname.startsWith("/auth");

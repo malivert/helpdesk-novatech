@@ -1,4 +1,5 @@
 import { KeyRound, ShieldCheck, TicketCheck } from "lucide-react";
+import Link from "next/link";
 import { login, signup } from "./actions";
 
 export default async function LoginPage({
@@ -30,6 +31,7 @@ export default async function LoginPage({
           <button className="primary-button" formAction={login}>Se connecter</button>
           <button className="secondary-button" formAction={signup}>Créer un compte demandeur</button>
         </form>
+        <div className="demo-entry"><span>ou</span><Link className="demo-button" href="/">Continuer en mode démonstration</Link><small>Aucun compte requis · données conservées dans ce navigateur</small></div>
       </section>
     </main>
   );
