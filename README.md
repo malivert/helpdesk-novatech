@@ -1,11 +1,11 @@
-# HelpDesk NovaTech
+# HelpDesk NovaTech 2.0
 
 [![Next.js](https://img.shields.io/badge/Next.js-16-000000?logo=nextdotjs)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Supabase](https://img.shields.io/badge/Supabase-optionnel-3FCF8E?logo=supabase&logoColor=white)](https://supabase.com/)
 [![CI](https://github.com/malivert/helpdesk-novatech/actions/workflows/ci.yml/badge.svg)](https://github.com/malivert/helpdesk-novatech/actions/workflows/ci.yml)
 
-Application web professionnelle de gestion de tickets informatiques conçue pour un projet de première année de **BTS SIO option SISR**.
+Application web professionnelle de gestion de tickets informatiques conçue pour un projet de première année de **BTS SIO option SISR**. La version 2.0 ajoute les rapports, les échéances, les pièces jointes locales, le mode sombre et une interface mobile renforcée.
 
 HelpDesk NovaTech fonctionne immédiatement dans le navigateur et peut ensuite évoluer vers un service partagé avec Supabase. Une panne distante ne bloque jamais la démonstration : l’application bascule automatiquement vers un stockage local persistant.
 
@@ -41,14 +41,23 @@ Le site ouvre directement le tableau de bord : aucun panneau de connexion ne blo
 
 ## Fonctionnalités
 
-- tableau de bord avec statistiques réellement calculées ;
+- tableau de bord avec nombre de tickets ouverts, temps moyen de résolution, taux de résolution et urgences réellement calculés ;
 - création, modification, fermeture et réouverture des tickets ;
+- confirmation explicite avant toute fermeture ;
+- date de création, date limite et signalement des échéances dépassées ;
+- attribution à un technicien et répartition de charge ;
+- commentaires sur chaque ticket et historique complet des changements ;
+- jusqu’à trois pièces jointes locales de 1 Mo par ticket dans la démonstration ;
 - recherche par numéro, sujet, description, service, demandeur ou technicien ;
 - filtres par priorité, statut et technicien ;
+- filtre des indicateurs par jour, semaine, mois ou toute la période ;
 - tri par mise à jour, numéro, priorité, statut ou sujet ;
-- commentaires et historique des opérations ;
 - export des tickets en JSON et CSV ;
 - import d’une sauvegarde JSON en mode démonstration ;
+- page Rapports avec graphiques accessibles et tickets les plus anciens ;
+- page Compétences BTS SIO SISR intégrée ;
+- notifications dans l’application et message hors ligne ;
+- mode sombre persistant ;
 - réinitialisation des données locales ;
 - interface responsive pour ordinateur, tablette et mobile ;
 - navigation clavier, lien d’évitement, libellés accessibles et réduction des animations ;
@@ -128,7 +137,7 @@ helpdesk-novatech/
 │   ├── auth/callback/       # confirmation Supabase Auth
 │   ├── login/               # ancienne URL redirigée vers le tableau de bord
 │   ├── globals.css          # design responsive et accessible
-│   └── page.tsx             # moteur hybride et interface HelpDesk
+│   └── page.tsx             # moteur hybride, rapports et interface 2.0
 ├── lib/supabase/            # clients sécurisés navigateur/serveur/proxy
 ├── supabase/migrations/     # schéma, audit, index et politiques RLS
 ├── tests/                   # tests automatisés
@@ -162,7 +171,7 @@ Le fonctionnement hybride illustre aussi une notion importante en SISR : la **co
 
 ## Présentation pour un recruteur
 
-> J’ai conçu HelpDesk NovaTech, une application de support informatique capable de fonctionner avec une base Supabase sécurisée ou de basculer automatiquement vers une démonstration locale. Le projet couvre le cycle de vie d’un incident, la recherche avancée, les sauvegardes, l’audit, les rôles et la continuité de service. J’ai également mis en place les tests, la vérification TypeScript, l’intégration continue GitHub Actions et le déploiement Vercel.
+> J’ai conçu HelpDesk NovaTech 2.0, une application de support informatique capable de fonctionner avec une base Supabase sécurisée ou de basculer automatiquement vers une démonstration locale. Le projet couvre le cycle de vie complet d’un incident, les échéances, les commentaires, les pièces jointes, l’historique, les rapports, les sauvegardes et la continuité de service. J’ai également mis en place les tests, la vérification TypeScript, GitHub Actions et le déploiement Vercel.
 
 ## Limites pédagogiques
 
