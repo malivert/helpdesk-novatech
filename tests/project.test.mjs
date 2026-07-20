@@ -21,6 +21,9 @@ test("le mode hybride bascule automatiquement vers localStorage", () => {
   assert.match(page, /activateDemo/);
   assert.match(page, /localStorage/);
   assert.match(page, /Aucune session Supabase · mode démonstration automatique/);
+  assert.match(page, /Mode démonstration autonome/);
+  assert.match(page, /activateDemo\("Mode autonome · sauvegarde automatique dans ce navigateur"\)/);
+  assert.doesNotMatch(page, /setTimeout\(\(\) => void loadSupabase\(\)/);
 });
 
 test("le profil Christian Martin et les initiales calculées sont conservés", () => {
@@ -95,6 +98,8 @@ test("Supabase reste sécurisé et optionnel", () => {
   assert.match(migration, /enable row level security/g);
   assert.match(migration, /grant select, insert, update, delete on public\.tickets to authenticated/);
   assert.doesNotMatch(page, /service_role/);
+  assert.match(page, /Supabase facultatif/);
+  assert.match(page, /Désactivé par défaut/);
 });
 
 test("GitHub Actions vérifie tests, lint, TypeScript et build", () => {

@@ -7,7 +7,7 @@
 
 Application web professionnelle de gestion de tickets informatiques conçue pour un projet de première année de **BTS SIO option SISR**. La version 2.0 ajoute les rapports, les échéances, les pièces jointes locales, le mode sombre et une interface mobile renforcée.
 
-HelpDesk NovaTech fonctionne immédiatement dans le navigateur et peut ensuite évoluer vers un service partagé avec Supabase. Une panne distante ne bloque jamais la démonstration : l’application bascule automatiquement vers un stockage local persistant.
+HelpDesk NovaTech fonctionne de manière autonome dans le navigateur. `localStorage` est le stockage principal et chaque modification est sauvegardée automatiquement. Supabase reste une option facultative, désactivée par défaut : aucune base distante, clé ou connexion n’est nécessaire.
 
 ## Démonstration en ligne
 
@@ -15,9 +15,9 @@ HelpDesk NovaTech fonctionne immédiatement dans le navigateur et peut ensuite �
 
 ## Fonctionnement hybride
 
-### Mode Supabase
+### Mode Supabase facultatif
 
-Lorsque l’URL et la clé publishable Supabase sont valides et que le service répond :
+Supabase est désactivé au démarrage. Il peut être activé volontairement depuis **Paramètres** lorsque l’environnement est déjà configuré :
 
 - session Supabase réutilisée lorsqu’elle existe ;
 - base PostgreSQL partagée ;
@@ -25,16 +25,17 @@ Lorsque l’URL et la clé publishable Supabase sont valides et que le service r
 - commentaires et historique d’audit ;
 - contrôle des accès avec Row Level Security.
 
-### Mode démonstration
+### Mode démonstration autonome
 
-Lorsque Supabase est absent, inaccessible ou renvoie une erreur :
+Ce mode est toujours utilisé au démarrage :
 
-- bascule automatique sans écran bloqué ;
+- démarrage direct sans écran de connexion ;
 - profil local **Christian Martin**, initiales **CM** ;
 - données de démonstration réalistes ;
-- persistance dans `localStorage` ;
+- `localStorage` utilisé comme stockage principal ;
+- sauvegarde automatique après chaque modification ;
 - indication permanente du mode utilisé ;
-- bouton de nouvelle tentative vers Supabase.
+- aucune erreur Supabase tant que l’option n’est pas activée.
 
 Aucun compte n’est nécessaire pour ce mode. Les données restent uniquement dans le navigateur utilisé.
 Le site ouvre directement le tableau de bord : aucun panneau de connexion ne bloque l’accès à la démonstration.
@@ -87,7 +88,7 @@ npm ci
 npm run dev
 ```
 
-Sans fichier d’environnement, le mode démonstration démarre automatiquement.
+Sans fichier d’environnement, le mode démonstration autonome démarre automatiquement et toutes les fonctions restent disponibles.
 
 ## Configuration Supabase facultative
 
