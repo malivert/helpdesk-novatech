@@ -1,0 +1,13 @@
+{
+  "name": "NovaSuite SISR",
+  "short_name": "NovaSuite",
+  "description": "Administration locale du système d’information",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#07101d",
+  "theme_color": "#07101d",
+  "lang": "fr",
+  "icons": [
+    { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}

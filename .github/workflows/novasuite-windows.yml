@@ -1,0 +1,54 @@
+name: Build Windows installer
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - "v*"
+  pull_request:
+    paths:
+      - "novasuite-sisr-enterprise/desktop/**"
+      - "novasuite-sisr-enterprise/tests/desktop-*.test.mjs"
+      - ".github/workflows/novasuite-windows.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Tests Node et SQLite
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: novasuite-sisr-enterprise/desktop/package-lock.json
+      - run: node --test novasuite-sisr-enterprise/tests/desktop-*.test.mjs
+
+  installer:
+    name: Installateur NSIS
+    needs: test
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: novasuite-sisr-enterprise/desktop/package-lock.json
+      - name: Installer les dépendances
+        working-directory: novasuite-sisr-enterprise/desktop
+        run: npm ci
+      - name: Construire l’installateur Windows
+        working-directory: novasuite-sisr-enterprise/desktop
+        run: npm run dist:windows
+        env:
+          CSC_IDENTITY_AUTO_DISCOVERY: "false"
+      - name: Publier l’artefact
+        uses: actions/upload-artifact@v4
+        with:
+          name: NovaSuite-SISR-Windows
+          path: novasuite-sisr-enterprise/release/NovaSuite-SISR-Setup-*.exe
+          if-no-files-found: error

@@ -1,0 +1,3 @@
+inventaire;hostname;type;serial;ip;systeme;statut
+PC-001;PC-SUPPORT-01;Poste;SN-DEMO-001;10.20.30.4;Windows 11;En ligne
+SW-001;SW-COEUR-01;Commutateur;SN-DEMO-002;10.20.0.2;NetworkOS;En ligne
