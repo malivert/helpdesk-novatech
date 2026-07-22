@@ -4,6 +4,15 @@ Toutes les évolutions notables de HelpDesk NovaTech sont documentées dans ce f
 
 Le format suit les principes de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/) et le projet utilise une numérotation sémantique.
 
+## [Non publié]
+
+### Amélioré
+
+- page de présentation restructurée pour une lecture recruteur en moins d’une minute ;
+- parcours de démonstration interactif en quatre étapes ;
+- contexte, mission personnelle, résultats chiffrés et preuves de compétences SISR rendus visibles ;
+- contraste du thème sombre et affichage mobile des nouvelles sections renforcés.
+
 ## [2.1.0] - 2026-07-20
 
 ### Ajouté

@@ -295,7 +295,7 @@ export default function Home() {
       {view === "reports" && <Reports tickets={periodTickets} metrics={metrics} team={team} onOpen={openDetails} />}
       {view === "team" && isStaff && <Team members={team} tickets={tickets} />}
       {view === "skills" && <Skills />}
-      {view === "about" && <ProjectPresentation />}
+      {view === "about" && <ProjectPresentation onNavigate={setView} />}
       {view === "settings" && <SettingsView mode={mode} reason={modeReason} dark={dark} supabaseAvailable={Boolean(supabase)} onSupabase={() => { setMode("loading"); void loadSupabase(); }} onTheme={() => setDark(!dark)} onJson={exportJson} onCsv={exportCsv} onImport={() => importRef.current?.click()} onReset={resetDemo} />}
     </main>
     <input ref={importRef} className="sr-only" type="file" accept="application/json,.json" onChange={importBackup} />
@@ -360,5 +360,64 @@ function ConfirmDialog({ ticket, onConfirm, onCancel }: { ticket: Ticket; onConf
 
 function Team({ members, tickets }: { members: Profile[]; tickets: Ticket[] }) { return <section className="team-grid">{members.map((member) => <article className="panel team-card" key={member.id}><div className="avatar large">{initials(member.full_name)}</div><h2>{member.full_name}</h2><p>{roleLabels[member.role]} · {member.department || "Sans service"}</p><div><span>Tickets actifs</span><strong>{tickets.filter((ticket) => ticket.assigned_to === member.id && isOpen(ticket)).length}</strong></div><span className="availability"><i />Compte actif</span></article>)}</section>; }
 function Skills() { const skills = [{ title: "Gérer le patrimoine informatique", text: "Inventaire des postes, serveurs et imprimantes, affectations, adresses IP, garanties, états, tickets liés et traçabilité des changements." }, { title: "Répondre aux incidents", text: "Qualification, priorité, attribution, commentaires, échéance, résolution et réouverture." }, { title: "Mettre à disposition un service", text: "Application hybride, continuité locale, sauvegarde, tests, CI et déploiement Vercel." }, { title: "Travailler en mode projet", text: "GitHub, documentation, automatisation, contrôle qualité et livraison continue." }, { title: "Développer la présence en ligne", text: "Interface responsive, accessible, mobile et dotée d’un mode sombre." }, { title: "Organiser son développement professionnel", text: "Rapports mesurables, présentation recruteur et amélioration continue." }]; return <section className="skills-page"><article className="panel skills-hero"><GraduationCap /><div><p className="section-kicker">BTS SIO option SISR</p><h2>Compétences mobilisées dans NovaTech 2.1</h2><p>Cette page relie les fonctions réalisées aux attendus professionnels de la formation.</p></div></article><div className="skills-grid">{skills.map((skill, index) => <article className="panel skill-card" key={skill.title}><span>0{index + 1}</span><h3>{skill.title}</h3><p>{skill.text}</p></article>)}</div></section>; }
-function ProjectPresentation() { const steps = [{ title: "Découvrir", text: "Consultez le tableau de bord et utilisez les filtres de période pour comprendre l’activité du support." }, { title: "Traiter un ticket", text: "Créez ou ouvrez un ticket, attribuez un technicien, ajoutez un commentaire puis fermez-le après confirmation." }, { title: "Gérer le parc", text: "Recherchez un équipement, contrôlez sa garantie, modifiez son affectation et ouvrez les tickets qui lui sont liés." }, { title: "Sauvegarder", text: "Dans Paramètres, exportez les données en JSON ou CSV. Une sauvegarde JSON peut ensuite être réimportée." }]; return <section className="about-page"><article className="panel project-hero"><div><p className="section-kicker">Version 2.1.0 · Projet pédagogique</p><h2>Un centre de services IT autonome et démontrable</h2><p>HelpDesk NovaTech réunit la gestion des incidents, le suivi du parc informatique et des indicateurs opérationnels dans une application accessible sans compte ni infrastructure distante obligatoire.</p><div className="project-tags"><span>Next.js 16</span><span>TypeScript</span><span>localStorage</span><span>Supabase optionnel</span><span>Vercel</span></div></div><BookOpen /></article><div className="about-grid"><article className="panel about-card"><p className="section-kicker">Objectif</p><h2>Contexte professionnel</h2><p>Le projet simule le travail quotidien d’un technicien support : qualifier les demandes, respecter les priorités, documenter les interventions et maintenir un inventaire fiable.</p></article><article className="panel about-card"><p className="section-kicker">Architecture</p><h2>Continuité de service</h2><p>Le navigateur conserve automatiquement les données de démonstration. Supabase peut être activé volontairement, sans jamais conditionner l’accès à l’application.</p></article></div><article className="panel user-guide"><div className="panel-heading"><div><p className="section-kicker">Guide utilisateur</p><h2>Prise en main en quatre étapes</h2></div></div><ol>{steps.map((step, index) => <li key={step.title}><span>{index + 1}</span><div><strong>{step.title}</strong><p>{step.text}</p></div></li>)}</ol></article><article className="panel roadmap-card"><div><p className="section-kicker">Limites actuelles</p><h2>Cadre de la démonstration</h2><ul><li>Les données locales ne sont pas synchronisées entre navigateurs ou appareils.</li><li>Les pièces jointes sont limitées pour préserver l’espace du navigateur.</li><li>Les notifications restent internes à l’application.</li><li>Le mode local ne remplace pas une sauvegarde serveur en production.</li></ul></div><div><p className="section-kicker">Évolutions futures</p><h2>Pistes réalistes</h2><ul><li>Synchronisation multi-utilisateur et gestion avancée des droits.</li><li>Supervision, SLA et notifications par e-mail.</li><li>Base de connaissances et rapports PDF d’intervention.</li><li>Stockage distant sécurisé des pièces jointes.</li></ul></div></article></section>; }
+function ProjectPresentation({ onNavigate }: { onNavigate: (view: View) => void }) {
+  const steps: { title: string; text: string; action: string; view: View }[] = [
+    { title: "Mesurer l’activité", text: "Lisez les indicateurs, les urgences et les tickets anciens.", action: "Ouvrir le tableau de bord", view: "dashboard" },
+    { title: "Traiter un incident", text: "Ouvrez INC-1062, attribuez-le et suivez son historique.", action: "Voir les tickets", view: "tickets" },
+    { title: "Contrôler le parc", text: "Recherchez SRV-AD-01 et consultez ses tickets liés.", action: "Explorer le parc", view: "inventory" },
+    { title: "Prouver le résultat", text: "Filtrez les rapports puis consultez les compétences mobilisées.", action: "Voir les rapports", view: "reports" },
+  ];
+  const competencies = [
+    { title: "Support utilisateurs", text: "Qualification, priorité, affectation, commentaire et clôture contrôlée." },
+    { title: "Gestion du patrimoine", text: "Inventaire, adresses IP, garanties, états et traçabilité des changements." },
+    { title: "Continuité de service", text: "Mode autonome, sauvegarde locale et exports portables JSON ou CSV." },
+    { title: "Livraison professionnelle", text: "TypeScript, tests, CI GitHub et déploiement continu sur Vercel." },
+  ];
+  return <section className="about-page">
+    <article className="panel project-hero recruiter-hero">
+      <div>
+        <p className="section-kicker">Christian Martin · Candidat en alternance BTS SIO SISR</p>
+        <h2>J’ai conçu un centre de services IT complet et immédiatement démontrable</h2>
+        <p>HelpDesk NovaTech montre ma capacité à organiser le support, maintenir un parc informatique fiable et livrer un service documenté, testé et accessible sans compte.</p>
+        <div className="hero-actions">
+          <button className="primary-button" onClick={() => onNavigate("dashboard")}><LayoutDashboard />Lancer la démo</button>
+          <button className="secondary-button" onClick={() => onNavigate("skills")}><GraduationCap />Voir mes compétences</button>
+        </div>
+        <div className="project-tags"><span>Next.js 16</span><span>TypeScript</span><span>localStorage</span><span>Supabase optionnel</span><span>Vercel</span></div>
+      </div>
+      <BookOpen />
+    </article>
+
+    <article className="panel recruiter-brief">
+      <div>
+        <p className="section-kicker">Lecture recruteur · 45 secondes</p>
+        <h2>Une preuve concrète de compétences SISR</h2>
+        <p>Le projet relie un besoin d’entreprise à une solution exploitable : centraliser les demandes, prioriser les incidents, tracer les actions et garder une vision fiable des équipements.</p>
+      </div>
+      <div className="proof-numbers" aria-label="Résultats du projet">
+        <div><strong>8</strong><span>tickets réalistes</span></div>
+        <div><strong>7</strong><span>équipements suivis</span></div>
+        <div><strong>4</strong><span>contrôles qualité</span></div>
+      </div>
+    </article>
+
+    <div className="mission-grid">
+      <article className="panel about-card"><p className="section-kicker">Contexte</p><h2>Une DSI à structurer</h2><p>Les demandes arrivent de plusieurs services et concernent les postes, le réseau, les comptes et les imprimantes. Elles doivent être centralisées et suivies.</p></article>
+      <article className="panel about-card"><p className="section-kicker">Ma mission</p><h2>Concevoir le service</h2><p>J’ai modélisé le cycle des tickets, créé l’inventaire, relié les incidents aux équipements et ajouté rapports, historique, sauvegarde et droits.</p></article>
+      <article className="panel about-card"><p className="section-kicker">Résultat</p><h2>Une démo sans blocage</h2><p>L’application fonctionne immédiatement en local, reste utilisable hors ligne et peut évoluer vers un mode partagé sécurisé avec Supabase.</p></article>
+    </div>
+
+    <article className="panel user-guide recruiter-demo">
+      <div className="panel-heading"><div><p className="section-kicker">Guide utilisateur · Démonstration guidée</p><h2>Le parcours conseillé en deux minutes</h2></div><span className="demo-duration"><Clock3 />2 min</span></div>
+      <ol>{steps.map((step, index) => <li key={step.title}><button className="demo-step" onClick={() => onNavigate(step.view)}><span>{index + 1}</span><div><strong>{step.title}</strong><p>{step.text}</p><em>{step.action}<ChevronRight /></em></div></button></li>)}</ol>
+    </article>
+
+    <article className="panel competency-proof">
+      <div className="panel-heading"><div><p className="section-kicker">Compétences démontrées</p><h2>Ce que le projet prouve techniquement</h2></div><button className="text-button" onClick={() => onNavigate("skills")}>Voir le détail <ChevronRight /></button></div>
+      <div className="competency-grid">{competencies.map((item) => <div key={item.title}><CheckCircle2 /><div><strong>{item.title}</strong><p>{item.text}</p></div></div>)}</div>
+    </article>
+
+    <article className="panel roadmap-card"><div><p className="section-kicker">Limites actuelles</p><h2>Cadre de la démonstration</h2><ul><li>Les données locales ne sont pas synchronisées entre navigateurs ou appareils.</li><li>Les pièces jointes sont limitées pour préserver l’espace du navigateur.</li><li>Les notifications restent internes à l’application.</li><li>Le mode local ne remplace pas une sauvegarde serveur en production.</li></ul></div><div><p className="section-kicker">Évolutions futures</p><h2>Pistes réalistes</h2><ul><li>Synchronisation multi-utilisateur et gestion avancée des droits.</li><li>Supervision, SLA et notifications par e-mail.</li><li>Base de connaissances et rapports PDF d’intervention.</li><li>Stockage distant sécurisé des pièces jointes.</li></ul></div></article>
+  </section>;
+}
 function SettingsView({ mode, reason, dark, supabaseAvailable, onSupabase, onTheme, onJson, onCsv, onImport, onReset }: { mode: Mode; reason: string; dark: boolean; supabaseAvailable: boolean; onSupabase: () => void; onTheme: () => void; onJson: () => void; onCsv: () => void; onImport: () => void; onReset: () => void }) { return <section className="settings-grid"><article className="panel settings-card"><span className="settings-icon"><ShieldCheck /></span><div><h2>Application autonome</h2><p>{reason}. localStorage est prioritaire et la sauvegarde est automatique.</p><span className={`service-ok ${mode}`}><i />{mode === "supabase" ? "Supabase optionnel connecté" : "Mode démonstration autonome"}</span></div></article><article className="panel backup-card"><div><p className="section-kicker">Portabilité</p><h2>Sauvegarde et export</h2><p>Exportez les tickets, commentaires, pièces jointes et historique, ou restaurez une sauvegarde JSON.</p></div><div className="backup-actions"><button className="secondary-button" onClick={onJson}><FileJson />Export JSON</button><button className="secondary-button" onClick={onCsv}><Download />Export CSV</button><button className="secondary-button" onClick={onImport}><Upload />Importer</button><button className="danger-button" onClick={onReset}><RefreshCcw />Réinitialiser</button></div></article><article className="panel settings-card"><span className="settings-icon"><Database /></span><div><h2>Supabase facultatif</h2><p>Désactivé par défaut. L’application n’en a pas besoin pour fonctionner.</p>{mode === "supabase" ? <span className="service-ok"><i />Connecté pour cette session</span> : <button className="secondary-button compact" disabled={!supabaseAvailable} onClick={onSupabase}><Database />{supabaseAvailable ? "Activer Supabase" : "Supabase non configuré"}</button>}</div></article><article className="panel settings-card"><span className="settings-icon">{dark ? <Moon /> : <Sun />}</span><div><h2>Apparence</h2><p>Choisissez un thème confortable. Le réglage est conservé dans le navigateur.</p><button className="secondary-button compact" onClick={onTheme}>{dark ? <Sun /> : <Moon />}{dark ? "Mode clair" : "Mode sombre"}</button></div></article></section>; }
