@@ -134,12 +134,19 @@ test("les données de démonstration sont cohérentes et suffisamment variées",
 
 test("la présentation, le guide et la feuille de route sont intégrés", () => {
   assert.match(page, /function ProjectPresentation/);
+  assert.match(page, /Christian Martin · Candidat en alternance BTS SIO SISR/);
+  assert.match(page, /Lecture recruteur · 45 secondes/);
+  assert.match(page, /Le parcours conseillé en deux minutes/);
+  assert.match(page, /onNavigate\(step\.view\)/);
+  assert.match(page, /Ce que le projet prouve techniquement/);
   assert.match(page, /Guide utilisateur/);
   assert.match(page, /Limites actuelles/);
   assert.match(page, /Évolutions futures/);
   assert.match(readme, /Guide utilisateur rapide/);
   assert.match(readme, /Limites et évolutions futures/);
   assert.match(styles, /\.project-hero/);
+  assert.match(styles, /\.recruiter-brief/);
+  assert.match(styles, /\.competency-grid/);
   assert.match(styles, /\.user-guide/);
 });
 

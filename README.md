@@ -142,7 +142,7 @@ Le workflow `.github/workflows/ci.yml` exécute automatiquement ces quatre contr
 5. Utiliser **Rapports** pour filtrer les indicateurs par période.
 6. Dans **Paramètres**, exporter une sauvegarde JSON ou un tableau CSV. Le JSON peut être réimporté ultérieurement.
 
-La page **À propos du projet** intégrée à l’application reprend cette prise en main, l’objectif du projet et son architecture.
+La page **À propos du projet** propose aussi un parcours recruteur de deux minutes : contexte, mission personnelle, résultats chiffrés, compétences démontrées et accès direct aux quatre écrans essentiels.
 
 ## Sauvegarde locale
 
