@@ -9,7 +9,7 @@ const [page, styles, client, proxy, readme, changelog, workflow, releaseWorkflow
   read("../package.json"), read("../supabase/migrations/20260720162335_helpdesk_core.sql"), read("../app/layout.tsx"),
 ]);
 
-test("la version 2.1 est déclarée et la version 2.0 reste documentée", () => {
+test("la version 2.1 est déclarée, affichée et la version 2.0 reste documentée", () => {
   assert.equal(JSON.parse(packageJson).version, "2.1.0");
   assert.match(readme, /HelpDesk NovaTech 2\.0/);
   assert.match(page, /NovaTech 2\.0/);
