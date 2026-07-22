@@ -1,0 +1,58 @@
+{
+  "name": "novasuite-sisr-desktop",
+  "version": "3.0.0",
+  "private": true,
+  "description": "Application Windows locale et hors connexion pour l'administration SISR",
+  "author": "Christian Malivert",
+  "license": "MIT",
+  "main": "main.cjs",
+  "scripts": {
+    "start": "electron main.cjs",
+    "dist:windows": "electron-builder --win nsis",
+    "pack:windows": "electron-builder --win dir"
+  },
+  "devDependencies": {
+    "electron": "43.2.0",
+    "electron-builder": "26.15.3"
+  },
+  "build": {
+    "appId": "fr.christianmalivert.novasuite",
+    "productName": "NovaSuite SISR",
+    "asar": true,
+    "directories": {
+      "output": "../release"
+    },
+    "files": [
+      "main.cjs",
+      "preload.cjs",
+      "core/**/*",
+      "renderer/**/*",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "../docs",
+        "to": "docs",
+        "filter": ["**/*"]
+      },
+      {
+        "from": "../samples",
+        "to": "samples",
+        "filter": ["**/*"]
+      }
+    ],
+    "win": {
+      "target": ["nsis"],
+      "artifactName": "NovaSuite-SISR-Setup-${version}.${ext}"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "NovaSuite SISR",
+      "deleteAppDataOnUninstall": false,
+      "runAfterFinish": true
+    }
+  }
+}

@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self'; script-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'self'" />
+    <title>NovaSuite SISR</title>
+    <link rel="stylesheet" href="./app.css" />
+  </head>
+  <body>
+    <section id="auth-screen" class="auth-screen">
+      <div class="auth-visual">
+        <div class="auth-brand"><span>N</span><div><strong>NovaSuite</strong><small>SISR · Édition Entreprise</small></div></div>
+        <div class="auth-pitch">
+          <p class="eyebrow">Administration locale sécurisée</p>
+          <h1>Votre système d’information.<br /><em>Maîtrisé sur votre PC.</em></h1>
+          <p>Onze outils SISR, une seule base SQLite locale, une traçabilité complète et aucun service Internet obligatoire.</p>
+          <div class="auth-features">
+            <span>SQLite local</span><span>3 rôles</span><span>Chiffrement AES-256</span><span>Sauvegardes automatiques</span>
+          </div>
+        </div>
+        <p class="auth-foot">NovaSuite SISR · Christian Malivert · Données stockées localement</p>
+      </div>
+      <div class="auth-panel">
+        <form id="setup-form" class="auth-form hidden">
+          <div class="step-pill">Assistant d’installation · Étape 1/1</div>
+          <h2>Créer l’administrateur</h2>
+          <p>Ce premier compte contrôlera les rôles, les sauvegardes et la restauration.</p>
+          <label>Nom complet<input name="display_name" required autocomplete="name" placeholder="Christian Malivert" /></label>
+          <label>Identifiant<input name="username" required minlength="3" autocomplete="username" placeholder="christian.admin" /></label>
+          <label>Mot de passe<input name="password" required minlength="10" type="password" autocomplete="new-password" placeholder="10 caractères minimum" /></label>
+          <label>Confirmation<input name="confirmation" required minlength="10" type="password" autocomplete="new-password" placeholder="Confirmer le mot de passe" /></label>
+          <button class="primary wide" type="submit">Initialiser NovaSuite</button>
+          <button id="setup-demo" class="link-button" type="button">Découvrir d’abord le mode Démonstration</button>
+        </form>
+
+        <form id="login-form" class="auth-form hidden">
+          <div class="mode-switch" role="group" aria-label="Mode de connexion">
+            <button type="button" data-mode="entreprise" class="active">Entreprise</button>
+            <button type="button" data-mode="demonstration">Démonstration</button>
+          </div>
+          <h2>Connexion sécurisée</h2>
+          <p id="login-description">Ouvrez la base professionnelle enregistrée sur cet ordinateur.</p>
+          <label>Identifiant<input name="username" required autocomplete="username" /></label>
+          <label>Mot de passe<input name="password" required type="password" autocomplete="current-password" /></label>
+          <div id="auth-message" class="form-message" role="alert"></div>
+          <button class="primary wide" type="submit">Se connecter</button>
+          <p class="security-note"><span>✓</span> Verrouillage automatique après inactivité</p>
+        </form>
+      </div>
+    </section>
+
+    <div id="app-shell" class="app-shell hidden">
+      <aside class="sidebar">
+        <button class="brand" data-view="dashboard"><span class="brand-mark">N</span><span><strong>NovaSuite</strong><small>SISR · Entreprise</small></span></button>
+        <div id="mode-badge" class="mode-badge">Mode Entreprise</div>
+        <nav id="main-nav" aria-label="Modules NovaSuite">
+          <p class="nav-label">Pilotage</p>
+          <button class="nav-item active" data-view="dashboard"><span>NX</span><div><strong>Vue d’ensemble</strong><small>Statistiques et alertes</small></div></button>
+          <p class="nav-label">Support &amp; annuaire</p>
+          <button class="nav-item" data-view="helpdesk"><span>HD</span><div><strong>HelpDesk</strong><small>Tickets unifiés</small></div></button>
+          <button class="nav-item" data-view="adlab"><span>AD</span><div><strong>ADLab</strong><small>Utilisateurs et rôles</small></div></button>
+          <button class="nav-item" data-view="deploy"><span>DD</span><div><strong>DeployDesk</strong><small>Déploiement des postes</small></div></button>
+          <p class="nav-label">Infrastructure</p>
+          <button class="nav-item" data-view="netwatch"><span>NW</span><div><strong>NetWatch</strong><small>Équipements partagés</small></div></button>
+          <button class="nav-item" data-view="ipplan"><span>IP</span><div><strong>IPPlan</strong><small>VLAN et adressage</small></div></button>
+          <button class="nav-item" data-view="wifi"><span>WS</span><div><strong>WiFiScope</strong><small>Mesures et recommandations</small></div></button>
+          <button class="nav-item" data-view="infra"><span>ID</span><div><strong>InfraDiagram</strong><small>Cartographie dynamique</small></div></button>
+          <p class="nav-label">Sécurité &amp; continuité</p>
+          <button class="nav-item" data-view="patch"><span>PP</span><div><strong>PatchPilot</strong><small>Correctifs critiques</small></div></button>
+          <button class="nav-item" data-view="logs"><span>LS</span><div><strong>LogSentinel</strong><small>Incidents et journaux</small></div></button>
+          <button class="nav-item" data-view="backup"><span>BG</span><div><strong>BackupGuard</strong><small>Sauvegarde et restauration</small></div></button>
+          <button class="nav-item" data-view="automation"><span>AA</span><div><strong>AutoAdmin</strong><small>Simulations contrôlées</small></div></button>
+        </nav>
+        <div class="sidebar-foot">
+          <button class="nav-item" data-view="settings"><span>⚙</span><div><strong>Administration</strong><small>Comptes, audit, paramètres</small></div></button>
+        </div>
+      </aside>
+
+      <main class="main-area">
+        <header class="topbar">
+          <div><p id="breadcrumb">NovaSuite / Vue d’ensemble</p><small id="database-state"><span></span> Base SQLite locale connectée</small></div>
+          <div class="top-actions">
+            <button id="notifications-button" class="icon-button" title="Notifications"><span>🔔</span><b id="notification-count">0</b></button>
+            <button id="lock-button" class="secondary compact">Verrouiller</button>
+            <button id="profile-button" class="profile"><span id="profile-initials">CM</span><div><strong id="profile-name">Utilisateur</strong><small id="profile-role">Rôle</small></div></button>
+          </div>
+        </header>
+        <div id="notice-bar" class="notice-bar hidden" role="status"></div>
+        <div id="view" class="content" aria-live="polite"></div>
+      </main>
+
+      <aside id="notification-drawer" class="drawer" aria-hidden="true">
+        <div class="drawer-head"><div><p class="eyebrow">Centre d’alertes</p><h2>Notifications</h2></div><button class="icon-button" data-close-drawer>×</button></div>
+        <div id="notification-list" class="drawer-list"></div>
+      </aside>
+    </div>
+
+    <div id="modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <div class="modal-card"><div class="modal-head"><div><p class="eyebrow" id="modal-eyebrow">NovaSuite</p><h2 id="modal-title">Action</h2></div><button id="modal-close" class="icon-button">×</button></div><div id="modal-content"></div></div>
+    </div>
+    <div id="toast-stack" class="toast-stack" aria-live="polite"></div>
+    <script src="./app.js"></script>
+  </body>
+</html>
